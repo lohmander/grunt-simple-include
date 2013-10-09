@@ -24,7 +24,7 @@ module.exports = function(grunt) {
                 } else {
 
                     var filecontent = grunt.file.read(incFp),
-                        regex = new RegExp('{{.*?include:.*?([a-zA-Z0-9/.]+).*?}}', 'g'),
+                        regex = new RegExp('{{.*?include:.*?([a-zA-Z0-9_@/.]+).*?}}', 'g'),
                         match;
 
                     while (match = regex.exec(filecontent)) {
