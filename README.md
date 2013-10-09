@@ -17,6 +17,17 @@ Once the plugin has been installed, it may be enabled inside your Gruntfile with
 grunt.loadNpmTasks('grunt-simple-include');
 ```
 
+## File inclusion
+To include a file use the familiar double-mustach syntax.
+
+```html
+<html>
+  <body>
+    {{ include: 'partials/content.html' }}
+  </body>
+</html>
+```
+
 ## The "simple_include" task
 
 ### Overview
