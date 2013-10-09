@@ -1,7 +1,7 @@
 {
   "name": "grunt-simple-include",
   "description": "Super easy way to include files with a familiar syntax.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/lohmander/grunt-simple-include",
   "author": {
     "name": "Hannes Lohmander",
