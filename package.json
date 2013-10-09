@@ -1,0 +1,43 @@
+{
+  "name": "grunt-simple-include",
+  "description": "Super easy way to include files with a familiar syntax.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/lohmander/grunt-simple-include",
+  "author": {
+    "name": "Hannes Lohmander",
+    "email": "hannes@lohmander.me",
+    "url": "lohmander.me"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/lohmander/grunt-simple-include.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lohmander/grunt-simple-include/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/lohmander/grunt-simple-include/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "Gruntfile.js",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt-contrib-nodeunit": "~0.2.0",
+    "grunt": "~0.4.1"
+  },
+  "peerDependencies": {
+    "grunt": "~0.4.1"
+  },
+  "keywords": [
+    "gruntplugin"
+  ]
+}
