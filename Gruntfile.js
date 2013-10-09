@@ -30,8 +30,11 @@ module.exports = function(grunt) {
 
     // Configuration to be run (and then tested).
     simple_include: {
+      options: {
+        stripPrefix: '_'
+      },
       default_options: {
-        src: ['test/fixtures/index.html', 'test/fixtures/header.html'],
+        src: ['test/fixtures/_*.html', 'test/fixtures/header.html'],
         dest: 'tmp/'
       }
     },

@@ -33,6 +33,26 @@ grunt.initConfig({
 })
 ```
 
+## Options
+
+### stripPrefix
+
+Option to strip any prefix if you'd like to.
+
+```js
+grunt.initConfig({
+  simple_include: {
+    options: {
+      stripPrefix: '_'
+    },
+    your_target: {
+      src: ['path/to/files/_*.html'],
+      dest: 'dist/'
+    }
+  }
+})
+```
+
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 

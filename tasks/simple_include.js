@@ -12,7 +12,8 @@ var path = require('path');
 
 module.exports = function(grunt) {
     grunt.registerMultiTask('simple_include', 'Super easy way to include files with a familiar syntax.', function() {
-        var dest = this.data.dest;
+        var dest = this.data.dest,
+            options = this.options();
 
         this.files[0].src.forEach(function(filepath) {
             function doInclude(incFp, level) {
@@ -44,7 +45,15 @@ module.exports = function(grunt) {
 
             grunt.log.writeln('\nParsing ' + filepath + '.');
 
-            grunt.file.write(dest + '/' + path.basename(filepath), doInclude(filepath, '-'));
+            var filename = path.basename(filepath);
+
+            if (options.stripPrefix) {
+                if (path.basename(filepath).substr(0, options.stripPrefix.length) === options.stripPrefix) {
+                    filename = filename.substr(options.stripPrefix.length);
+                }
+            }
+
+            grunt.file.write(dest + '/' + filename, doInclude(filepath, '-'));
         });
     });
 };
