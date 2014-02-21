@@ -24,16 +24,24 @@ module.exports = function(grunt) {
                 } else {
 
                     var filecontent = grunt.file.read(incFp),
-                        regex = new RegExp('{{.*?include:.*?([a-zA-Z0-9_@/.-]+).*?}}', 'g'),
+                        regex = new RegExp('{{.*?include:.*?([a-zA-Z0-9_@/.-]+)(.*?|.*?\\@\\d+.*?)}}', 'g'),
                         match;
 
                     while (match = regex.exec(filecontent)) {
-                        var includeFilepath = path.dirname(incFp) + '/' + match[1];
+                        var includeFilepath = path.dirname(incFp) + '/' + match[1],
+                            timesMatch = match[2].replace(' ', ''),
+                            times = (timesMatch !== undefined)? timesMatch.substr(2, timesMatch.length) : 1;
 
                         if (grunt.file.exists(includeFilepath)) {
                             grunt.log.writeln(level + '> Including ' + includeFilepath);
 
-                            filecontent = filecontent.replace(new RegExp(match[0], 'g'), doInclude(includeFilepath, level + '-'));
+                            var content = doInclude(includeFilepath, level + '-');
+
+                            for (var i = 1; i < times; i++) {
+                                content += doInclude(includeFilepath, level + '-');
+                            }
+
+                            filecontent = filecontent.replace(new RegExp(match[0], 'g'), content);
                         } else {
                             grunt.log.warn('Include path "' + includeFilepath + '" not found.');
                         }
