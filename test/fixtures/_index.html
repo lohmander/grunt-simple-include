@@ -6,10 +6,10 @@
     </head>
 
     <body>
-        {{ include: 'page-header.html' @2 }}
+        {% include: 'page-header.html' @title:'Hello World' @subtitle:'World' %}
 
         <main role="main"></main>
 
-        {{ include: 'page-footer.html' }}
+        {% include: 'page-footer.html' @2 %}
     </body>
 </html>

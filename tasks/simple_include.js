@@ -16,29 +16,57 @@ module.exports = function(grunt) {
             options = this.options();
 
         this.files[0].src.forEach(function(filepath) {
-            function doInclude(incFp, level) {
+            function includeVariables(content, variables) {
+                for (var key in variables) {
+                    if (variables.hasOwnProperty(key)) {
+                        var regex = new RegExp('{{\\s*' + key + '\\s*}}', 'g');
+                        content = content.replace(regex, variables[key]);
+                    }
+                }
 
+                return content;
+            }
+
+            function doInclude(incFp, variables, level) {
                 if (!grunt.file.exists(incFp)) {
                     grunt.log.warn('Source file "' + incFp + '" not found.');
                     return false;
                 } else {
 
                     var filecontent = grunt.file.read(incFp),
-                        regex = new RegExp('{{.*?include:.*?([a-zA-Z0-9_@/.-]+)(.*?|.*?\\@\\d+.*?)}}', 'g'),
-                        match;
+                        regex = new RegExp('{%.*?include:.*?([a-zA-Z0-9_@/.-]+).*?\'?(.*?)%}', 'g'),
+                        extraRegex = new RegExp('@([^@]+)', 'g'),
+                        match, extraMatch;
+
+                    filecontent = includeVariables(filecontent, variables);
 
                     while (match = regex.exec(filecontent)) {
                         var includeFilepath = path.dirname(incFp) + '/' + match[1],
-                            timesMatch = match[2].replace(' ', ''),
-                            times = (timesMatch !== undefined)? timesMatch.substr(2, timesMatch.length) : 1;
+                            extra = match[2],
+                            times = 1,
+                            content = '',
+                            newVariables = {};
+
+                        while (extraMatch = extraRegex.exec(extra)) {
+                            var param = extraMatch[1].replace(/^\s+|\s+$/, ''),
+                                paramMatch;
+
+                            if (param.match('\\d+')) {
+                                times = parseInt(param, 10);
+                            }
+
+                            if (paramMatch = param.match('([^:]+):(.+)')) {
+                                var property = paramMatch[1],
+                                    value = paramMatch[2].replace(/^\s*'|'\s*$/g, '');
+                                newVariables[property] = value;
+                            }
+                        }
 
                         if (grunt.file.exists(includeFilepath)) {
                             grunt.log.writeln(level + '> Including ' + includeFilepath);
 
-                            var content = doInclude(includeFilepath, level + '-');
-
-                            for (var i = 1; i < times; i++) {
-                                content += doInclude(includeFilepath, level + '-');
+                            for (var i = 0; i < times; i++) {
+                                content += doInclude(includeFilepath, newVariables, level + '-');
                             }
 
                             filecontent = filecontent.replace(new RegExp(match[0], 'g'), content);
@@ -61,7 +89,7 @@ module.exports = function(grunt) {
                 }
             }
 
-            grunt.file.write(dest + '/' + filename, doInclude(filepath, '-'));
+            grunt.file.write(dest + '/' + filename, doInclude(filepath, {}, '-'));
         });
     });
 };
