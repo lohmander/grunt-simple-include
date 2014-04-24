@@ -18,12 +18,12 @@ grunt.loadNpmTasks('grunt-simple-include');
 ```
 
 ## File inclusion
-To include a file use the familiar double-mustach syntax.
+To include a file use the familiar mustach syntax.
 
 ```html
 <html>
   <body>
-    {{ include: 'partials/content.html' }}
+    {% include: 'partials/content.html' %}
   </body>
 </html>
 ```
@@ -33,9 +33,25 @@ To include a file use the familiar double-mustach syntax.
 ```html
 <html>
   <body>
-   {{ include: 'partials/article.html' @2 }}
+{% include: 'partials/article.html' @2 %}
   </body>
 </html>
+```
+
+### Pass variables to included file
+
+```html
+<html>
+  <body>
+   {% include: 'partials/article.html' @key:value @key2:value %}
+  </body>
+</html>
+```
+
+#### Print variables (partials/article.html)
+```html
+   <p>{{ key }}</p>
+   <p>{{ key2 }}</p>
 ```
 
 ## The "simple_include" task
