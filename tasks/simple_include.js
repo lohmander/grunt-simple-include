@@ -51,7 +51,7 @@ module.exports = function(grunt) {
                             var param = extraMatch[1].replace(/^\s+|\s+$/, ''),
                                 paramMatch;
 
-                            if (param.match('\\d+')) {
+                            if (param.match('^\\d+')) {
                                 times = parseInt(param, 10);
                             }
 

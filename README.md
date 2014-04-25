@@ -94,6 +94,8 @@ grunt.initConfig({
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+**2014-04-25** 0.3.1 Bugfix with numbers in variables
+
 **2014-04-24** 0.3.0 Added option to pass variables and updated include syntax
 
 **2014-03-06** 0.2.0 Added option to run each include multiple times with a single statement
