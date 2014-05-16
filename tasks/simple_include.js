@@ -15,7 +15,7 @@ module.exports = function(grunt) {
         var dest = this.data.dest,
             options = this.options({
                 includeRegex: '{%.*?include:.*?([a-zA-Z0-9_@/.-]+).*?\'?(.*?)%}',
-                variableRegex: '@(\\w+):[\'|]([^@]+)[\'|]',
+                variableRegex: '\\s@(\\w+):["|\'|\\S]([^@\']+)',
                 baseDir: null,
                 pathResolver: function(filepath) {
                     return filepath;
@@ -27,6 +27,7 @@ module.exports = function(grunt) {
                 for (var key in variables) {
                     if (variables.hasOwnProperty(key)) {
                         var regex = new RegExp('{{\\s*' + key + '\\s*}}', 'g');
+
                         content = content.replace(regex, variables[key]);
                     }
                 }
@@ -67,8 +68,6 @@ module.exports = function(grunt) {
                             newVariables = {},
                             multiplier;
 
-                            console.log(includeFilepath);
-
                         // Look for variables to pass to the included file
                         while (extraMatch = extraRegex.exec(extra)) {
                             var property = cleanString(extraMatch[1]),
@@ -93,6 +92,7 @@ module.exports = function(grunt) {
 
                             grunt.log.writeln(level + '> Including ' + includeFilepath);
 
+                            // Do the inclusion the specified number of times (defaults to just once)
                             for (var i = 0; i < times; i++) {
                                 content += doInclude(includeFilepath, newVariables, level + '-');
                             }
