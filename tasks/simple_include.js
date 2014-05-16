@@ -15,7 +15,10 @@ module.exports = function(grunt) {
         var dest = this.data.dest,
             options = this.options({
                 includeRegex: '{%.*?include:.*?([a-zA-Z0-9_@/.-]+).*?\'?(.*?)%}',
-                variableRegex: '@([^@]+)'
+                variableRegex: '@([^@]+)',
+                pathResolver: function(path) {
+                    return path;
+                }
             });
 
         this.files[0].src.forEach(function(filepath) {
@@ -97,7 +100,7 @@ module.exports = function(grunt) {
                 }
             }
 
-            grunt.file.write(dest + '/' + filename, doInclude(filepath, {}, '-'));
+            grunt.file.write(dest + '/' + filename, doInclude(options.pathResolver(filepath), {}, '-'));
         });
     });
 };
