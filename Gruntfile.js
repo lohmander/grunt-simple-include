@@ -8,6 +8,8 @@
 
 'use strict';
 
+var path = require('path');
+
 module.exports = function(grunt) {
 
   // Project configuration.
@@ -36,6 +38,17 @@ module.exports = function(grunt) {
       default_options: {
         src: ['test/fixtures/_*.html', 'test/fixtures/header.html'],
         dest: 'tmp/'
+      },
+      custom_options: {
+        src: ['tmp/*.html'],
+        dest: 'tmp/',
+        options: {
+          includeRegex: '<widget.([a-zA-Z0-9_@/.-]+).*?(.*?")>',
+          variableRegex: '(\\w+)=["|\'](\\w+)["|\']',
+          pathResolver: function (filepath) {
+            return path.join(path.dirname(filepath).replace(/\./g, '/'), path.basename(filepath));
+          }
+        }
       }
     },
 

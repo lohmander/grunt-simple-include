@@ -15,9 +15,9 @@ module.exports = function(grunt) {
         var dest = this.data.dest,
             options = this.options({
                 includeRegex: '{%.*?include:.*?([a-zA-Z0-9_@/.-]+).*?\'?(.*?)%}',
-                variableRegex: '@([^@]+)',
-                pathResolver: function(path) {
-                    return path;
+                variableRegex: '@(\\w+):[\'|]([^@]+)[\'|]',
+                pathResolver: function(filepath) {
+                    return filepath;
                 }
             });
 
@@ -33,39 +33,49 @@ module.exports = function(grunt) {
                 return content;
             }
 
+            function cleanString(string) {
+                if (string === undefined) {
+                    return null;
+                }
+
+                return string.replace(/^\s+|\s+$/g, '');
+            }
+
+            // Perform inclusion
             function doInclude(incFp, variables, level) {
+                // Check if the file exists at all, if not abort
                 if (!grunt.file.exists(incFp)) {
                     grunt.log.warn('Source file "' + incFp + '" not found.');
                     return false;
                 } else {
-
                     var filecontent = grunt.file.read(incFp),
                         regex = new RegExp(options.includeRegex, 'g'),
                         extraRegex = new RegExp(options.variableRegex, 'g'),
                         match, extraMatch;
 
+                    // Insert variables if passed
                     filecontent = includeVariables(filecontent, variables);
 
+                    // Look for inclusion statements in file
                     while (match = regex.exec(filecontent)) {
                         var includeFilepath = path.dirname(incFp) + '/' + match[1],
                             extra = match[2],
                             times = 1,
                             content = '',
-                            newVariables = {};
+                            newVariables = {},
+                            multiplier;
 
+                        // Look for variables to pass to the included file
                         while (extraMatch = extraRegex.exec(extra)) {
-                            var param = extraMatch[1].replace(/^\s+|\s+$/, ''),
-                                paramMatch;
+                            var property = cleanString(extraMatch[1]),
+                                value = cleanString(extraMatch[2]);
 
-                            if (param.match('^\\d+')) {
-                                times = parseInt(param, 10);
-                            }
+                            newVariables[property] = value;
+                        }
 
-                            if (paramMatch = param.match('([^:]+):(.+)')) {
-                                var property = paramMatch[1],
-                                    value = paramMatch[2].replace(/^\s*'|'\s*$/g, '');
-                                newVariables[property] = value;
-                            }
+                        // If there's a multiply statement, parse it
+                        if (multiplier = new RegExp('@(\\d+)[^:]').exec(extra)) {
+                            times = multiplier[1];
                         }
 
                         if (grunt.file.exists(includeFilepath)) {

@@ -93,16 +93,19 @@ grunt.initConfig({
 ### includeRegex
 
 Type: String
+
 Default: `{%.*?include:.*?([a-zA-Z0-9_@/.-]+).*?\'?(.*?)%}`
 
 ### variableRegex
 
 Type: String
-Default: `@([^@]+)`
+
+Default: `@(\\w+):[\'|]([^@]+)[\'|]`
 
 ### pathResolver
 
 Type: Function
+
 Default: (passes the path through unmodified)
 
 ## Contributing
