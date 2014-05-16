@@ -108,6 +108,12 @@ Type: Function
 
 Default: (passes the path through unmodified)
 
+### baseDir
+
+Type: String
+
+Default: null (will be relative to the file doing the inclusion)
+
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 

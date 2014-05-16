@@ -45,6 +45,7 @@ module.exports = function(grunt) {
         options: {
           includeRegex: '<widget.([a-zA-Z0-9_@/.-]+).*?(.*?")>',
           variableRegex: '(\\w+)=["|\'](\\w+)["|\']',
+          baseDir: 'test/fixtures',
           pathResolver: function (filepath) {
             return path.join(path.dirname(filepath).replace(/\./g, '/'), path.basename(filepath));
           }

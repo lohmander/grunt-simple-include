@@ -16,6 +16,7 @@ module.exports = function(grunt) {
             options = this.options({
                 includeRegex: '{%.*?include:.*?([a-zA-Z0-9_@/.-]+).*?\'?(.*?)%}',
                 variableRegex: '@(\\w+):[\'|]([^@]+)[\'|]',
+                baseDir: null,
                 pathResolver: function(filepath) {
                     return filepath;
                 }
@@ -58,12 +59,15 @@ module.exports = function(grunt) {
 
                     // Look for inclusion statements in file
                     while (match = regex.exec(filecontent)) {
-                        var includeFilepath = path.dirname(incFp) + '/' + match[1],
+                        var baseDir = (options.baseDir !== null)? path.resolve(options.baseDir) : path.dirname(incFp),
+                            includeFilepath = baseDir + '/' + match[1],
                             extra = match[2],
                             times = 1,
                             content = '',
                             newVariables = {},
                             multiplier;
+
+                            console.log(includeFilepath);
 
                         // Look for variables to pass to the included file
                         while (extraMatch = extraRegex.exec(extra)) {
@@ -78,7 +82,10 @@ module.exports = function(grunt) {
                             times = multiplier[1];
                         }
 
+                        // Check if the file (or directory) exists
                         if (grunt.file.exists(includeFilepath)) {
+                            // Check if the path is a directory and if so, look for index.html in
+                            // the given directory
                             if (grunt.file.isDir(includeFilepath) &&
                                 grunt.file.exists(path.join(includeFilepath, 'index.html'))) {
                                 includeFilepath = path.join(includeFilepath, 'index.html');
