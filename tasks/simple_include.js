@@ -13,7 +13,10 @@ var path = require('path');
 module.exports = function(grunt) {
     grunt.registerMultiTask('simple_include', 'Super easy way to include files with a familiar syntax.', function() {
         var dest = this.data.dest,
-            options = this.options();
+            options = this.options({
+                includeRegex: '{%.*?include:.*?([a-zA-Z0-9_@/.-]+).*?\'?(.*?)%}',
+                variableRegex: '@([^@]+)'
+            });
 
         this.files[0].src.forEach(function(filepath) {
             function includeVariables(content, variables) {
@@ -34,8 +37,8 @@ module.exports = function(grunt) {
                 } else {
 
                     var filecontent = grunt.file.read(incFp),
-                        regex = new RegExp('{%.*?include:.*?([a-zA-Z0-9_@/.-]+).*?\'?(.*?)%}', 'g'),
-                        extraRegex = new RegExp('@([^@]+)', 'g'),
+                        regex = new RegExp(options.includeRegex, 'g'),
+                        extraRegex = new RegExp(options.variableRegex, 'g'),
                         match, extraMatch;
 
                     filecontent = includeVariables(filecontent, variables);
