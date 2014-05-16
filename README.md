@@ -118,6 +118,8 @@ Default: null (will be relative to the file doing the inclusion)
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
+**2014-05-16** 0.4.0 Added option to set custom parsing regex, path resolver & added support for automatic index file detection
+
 **2014-04-25** 0.3.1 Bugfix with numbers in variables
 
 **2014-04-24** 0.3.0 Added option to pass variables and updated include syntax
