@@ -66,6 +66,11 @@ module.exports = function(grunt) {
                         }
 
                         if (grunt.file.exists(includeFilepath)) {
+                            if (grunt.file.isDir(includeFilepath) &&
+                                grunt.file.exists(path.join(includeFilepath, 'index.html'))) {
+                                includeFilepath = path.join(includeFilepath, 'index.html');
+                            }
+
                             grunt.log.writeln(level + '> Including ' + includeFilepath);
 
                             for (var i = 0; i < times; i++) {
